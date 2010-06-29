@@ -754,6 +754,7 @@ proc_column_list(grn_ctx *ctx, int nargs, grn_obj **args, grn_user_data *user_da
   if ((table = grn_ctx_get(ctx, GRN_TEXT_VALUE(VAR(0)),
                            GRN_TEXT_LEN(VAR(0))))) {
     grn_hash *cols;
+    grn_obj *col;
     if ((cols = grn_hash_create(ctx, NULL, sizeof(grn_id), 0,
                                 GRN_OBJ_TABLE_HASH_KEY|GRN_HASH_TINY))) {
       GRN_OUTPUT_ARRAY_OPEN("", -1);
@@ -791,10 +792,30 @@ proc_column_list(grn_ctx *ctx, int nargs, grn_obj **args, grn_user_data *user_da
       GRN_OUTPUT_CSTR("ShortText");
       GRN_OUTPUT_ARRAY_CLOSE();
       GRN_OUTPUT_ARRAY_CLOSE();
+      if ((col = grn_obj_column(ctx, table, KEY_NAME, sizeof(KEY_NAME)-1))) {
+        int name_len;
+        char name_buf[GRN_TABLE_MAX_KEY_SIZE];
+        grn_obj o;
+        GRN_TEXT_INIT(&o, 0);
+        GRN_OUTPUT_ARRAY_OPEN("", -1);
+        GRN_OUTPUT_INT32(0);
+        GRN_OUTPUT_CSTR(KEY_NAME);
+        GRN_OUTPUT_CSTR("");
+        GRN_OUTPUT_CSTR("");
+        grn_column_create_flags_to_text(ctx, &o, 0);
+        GRN_OUTPUT_OBJ(&o, NULL);
+        name_len = grn_obj_name(ctx, table, name_buf, GRN_TABLE_MAX_KEY_SIZE);
+        GRN_OUTPUT_STR(name_buf, name_len);
+        objid2name(ctx, table->header.domain, &o);
+        GRN_OUTPUT_OBJ(&o, NULL);
+        GRN_OUTPUT_ARRAY_OPEN("", -1);
+        GRN_OUTPUT_ARRAY_CLOSE();
+        GRN_OUTPUT_ARRAY_CLOSE();
+        grn_obj_unlink(ctx, col);
+      }
       if (grn_table_columns(ctx, table, NULL, 0, (grn_obj *)cols) >= 0) {
         grn_id *key;
         GRN_HASH_EACH(ctx, cols, id, &key, NULL, NULL, {
-          grn_obj *col;
           if ((col = grn_ctx_at(ctx, *key))) {
             print_columninfo(ctx, col);
             grn_obj_unlink(ctx, col);
