@@ -31,7 +31,7 @@ static grn_obj *database, *comments, *content, *expression, *variable, *result;
 void
 cut_startup(void)
 {
-  tmp_directory = g_build_filename(grn_test_get_base_dir(),
+  tmp_directory = g_build_filename(grn_test_get_build_dir(),
                                    "tmp",
                                    "test-table-select-normalize",
                                    NULL);

@@ -56,7 +56,7 @@ static grn_vgram *vgram;
 void
 cut_startup(void)
 {
-  tmp_directory = g_build_filename(grn_test_get_base_dir(),
+  tmp_directory = g_build_filename(grn_test_get_build_dir(),
                                    "tmp",
                                    "test-inverted-index",
                                    NULL);

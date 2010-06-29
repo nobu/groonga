@@ -36,7 +36,7 @@ static grn_id users, daijiro;
 static void
 setup_database(void)
 {
-  tmp_directory = g_build_filename(grn_test_get_base_dir(),
+  tmp_directory = g_build_filename(grn_test_get_build_dir(),
                                    "tmp",
                                    NULL);
   database_path = g_build_filename(tmp_directory,

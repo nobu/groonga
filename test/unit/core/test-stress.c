@@ -60,7 +60,7 @@ cut_setup(void)
 
 #undef SAVE_ENV_VALUE
 
-  tmp_dir = g_build_filename(grn_test_get_base_dir(), "tmp", NULL);
+  tmp_dir = g_build_filename(grn_test_get_build_dir(), "tmp", NULL);
   cut_remove_path(tmp_dir, NULL);
 
   base_dir = g_build_filename(tmp_dir, "stress", NULL);
